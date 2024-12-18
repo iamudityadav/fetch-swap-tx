@@ -20,8 +20,8 @@ Follow these steps to get this project up and running locally:
 
 3. Install dependencies::
    ```bash
-    npm install
+   npm install
 
 ## Running the Project
 ```bash
-    node src/index.js
+   node src/index.js
