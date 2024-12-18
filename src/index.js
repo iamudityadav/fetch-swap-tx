@@ -24,7 +24,7 @@ class Swap{
         this.baseTokenAmount = baseTokenAmount;
         this.quoteTokenAmount = quoteTokenAmount;
         this.txType = txType;
-        this.prie = price;
+        this.price = price;
     }
 }
 
