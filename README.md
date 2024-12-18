@@ -16,7 +16,7 @@ Follow these steps to get this project up and running locally:
 
 2. Navigate into the project directory:
    ```bash
-   cd repository
+   cd fetch-swap-tx
 
 3. Install dependencies::
    ```bash
