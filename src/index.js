@@ -1,6 +1,6 @@
 const {ethers} = require("ethers");
 
-const provider = new ethers.WebSocketProvider("wss://eth.drpc.org");
+const provider = new ethers.WebSocketProvider("wss://ethereum-rpc.publicnode.com");
 
 const poolABI = [
     "event Swap(address indexed sender,address indexed recipient,int256 amount0,int256 amount1,uint160 sqrtPriceX96,uint128 liquidity,int24 tick)"
@@ -29,10 +29,11 @@ class Swap{
 }
 
 usdcWethContract.on(poolABI[0], async (sender,recipient,amount0,amount1,sqrtPriceX96,liquidity,tick) => {
-    const price = (Number(sqrtPriceX96) ** 2)/ 2 ** 192;
-
     const usdcDecimals = await usdcContract.decimals();     //token0
     const wethDecimals = await wethContract.decimals();     //token1
+
+    const price = (Number(sqrtPriceX96) ** 2)/ 2 ** 192;                                //calculating price from sqrtPriceX96
+    const adjustedPrice = 1 / (price / 10 ** Number(wethDecimals - usdcDecimals));      //calculating price of 1WETH in terms of USDC
 
     let txType;
     let baseTokenAmount;
@@ -48,7 +49,7 @@ usdcWethContract.on(poolABI[0], async (sender,recipient,amount0,amount1,sqrtPric
         quoteTokenAmount = ethers.formatUnits(amount0, usdcDecimals);
     }
 
-    const newSwap = new Swap(sender.toString(), recipient.toString(), baseTokenAmount, quoteTokenAmount, txType, price);
+    const newSwap = new Swap(sender.toString(), recipient.toString(), baseTokenAmount, quoteTokenAmount, txType, adjustedPrice);
     console.log(newSwap);
 
     // console.log(":::::::::::::::::::::Swap detected:::::::::::::::::::::");
